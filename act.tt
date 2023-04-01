@@ -1,0 +1,95 @@
+#nop ==常用action==;
+
+#nop #act {1分钟内回答以下问题} {answer 1};
+
+#act {你全身放松，坐下来开始运功疗伤。} {
+  #delay 1 {yun heal};
+};
+#act {你全身放松，运转真气进行疗伤。} {
+  #delay 1 {yun inspire};
+};
+#nop #act {你动作似乎开始有点不太灵光，但是仍然有条不紊} { yun recover};
+#nop #act {你看起来可能有些累了} { yun recover};
+#nop #act {你似乎十分疲惫，看来需要好好休息了} { yun recover};
+#nop #act {你气喘嘘嘘，看起来状况并不太好} { yun recover};
+#nop #act {你看起来已经力不从心了} { yun recover};
+
+#act {^你有很长一段时间没有备份档案了} {backup};
+
+#act {^吊桥还没有升起来，你就这样走了，可能会给外敌可乘之机的。$} {sheng bridge};
+
+#act {^你拿出一两黄金(Gold)给钱老本。$} {ask qian about 进宫};
+
+#act {^你必须先把木门打开！$} {open door};
+
+#act {^你在这里找到了一本武功心得。$} {kan xinde};
+
+#act {^你找到了一些奇怪的线索。$} {mess clue};
+
+#nop #act {^你感觉心中的杀气渐渐消失} {#delay 1 {chanhui}};
+
+#act {^%s中年女佣(Nvyong)} {ask nvyong about 郭大侠};
+
+#nop #act {^ %*文铜板(Coin)$} {wait;get coin};
+#act {^ %*两白银(Silver)$} {wait;get silver};
+#act {^ %*两黄金(Gold)$} {wait;get gold};
+#act {^ %*银票(Cash)$} {wait;get cash};
+#nop #act {^ %*陨铁(Yun tie)$} {wait;get yun tie};
+
+#act {^你从%*{搜出|拿出}一件铁甲。$} {drop armor};
+#act {^你从%*{搜出|拿出}一柄长剑。$} {drop changjian};
+#act {^你从%*{搜出|拿出}一本紫霞秘籍。$} {drop miji};
+
+#nop #act {^你从%*{搜出|拿出}一柄长鞭。$} {drop whip};
+
+#act {^你从%*{除下|拿出|搜出}一件布衣。$} {drop cloth};
+
+#nop #act {^你从%*{搜出|拿出}一只铁轮。$} {drop falun};
+
+#act {^卫士对你大吼一声：站住，干什么的？(answer)} {answer 送信};
+
+#act {^重新连线完毕} {set wimpy 30};
+
+#nop slink查看mxp链接，termux调用浏览器mxp;
+#alias {mxp} {#sys termux-open-url $link};
+#alias {cmxp} {#sys unchroot am start -a android.intent.action.VIEW -d $link};
+#action {^%*在线发出红包，请到http://fullme.pkuxkx.net/robot.php?filename=%1查询口令。%*$} {
+  #var link {http://fullme.pkuxkx.net/robot.php?filename=%1};
+  #nop mxp;
+  #system sh bot/fullme.sh %1;
+};
+#action {^http://fullme.pkuxkx.net/robot.php?filename=%1} {
+  #var link {http://fullme.pkuxkx.net/robot.php?filename=%1};
+  #nop mxp;
+  #system sh bot/fullme.sh %1;
+};
+
+#act {^http://fullme.pkuxkx.com/robot.php?filename=%1} {
+	#var link {http://fullme.pkuxkx.com/robot.php?filename=%1};
+  #nop mxp;
+  #system sh bot/fullme.sh %1;
+};
+
+#nop ==个人信息==sc,sk查看刷新;
+#alias {xy.home} {enter $myid};
+#var mymenpai {};
+#var myid {};
+#var mygender {};
+#var mydodgelv 0;
+#act {^┌───人物详情───────────────────────┐$}
+{
+    #class tmp open;
+    #act {^│%!s%* %*(%*)%!s│$} {#var myid @lower{%%3}};
+    #act {│门派：%*%!s│$} {#var mymenpai %%1};
+    #act {^│年龄：%*岁%!s│} {#var myage @ctd{%%1}};
+    #act {^│性别：%*性%!s│} {#var mygender %%1};
+    #act {^└───────────────┴─────北大侠客行────┘$} {#class tmp kill};
+    #class tmp close;
+};
+
+#act {^┌───%!*项基本知识────┬─────┐$} 
+{
+    #line oneshot #act {^│  基本轻功%!s│%d.%d%!s│$} {#var mydodgelv @int{%%1}};
+};
+
+#nop ==个人信息结束=;

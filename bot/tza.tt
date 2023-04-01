@@ -1,0 +1,46 @@
+#nop 天珠;
+#class tza open;
+
+#tic {tza} {#untic tza;tzaa} {2};
+#alias {tzaa} {
+  set wimpy 80;
+  #var i_sk 1;
+  ask dashi about job};
+#alias {tzd} {give dashi tian zhu};
+#alias {tzg} {get tian zhu}
+#alias {tzf} {ask dashi about fail;tzx;#untic tza1};
+
+#act {^莲花生大士(lianhuasheng dashi)告诉你：我推测天珠可能即将在%1，你不妨去看一看。$} {
+  #tic {tza1} {#echo {%c%h} {light yellow} {天珠在%1}} {15}
+};
+
+#act {^似乎有什么东西一闪……$} {
+   wait;stopwalk;
+   #delay 2 look
+};
+#alias f1 {
+  #var oppo %1;
+  zhuanzhu %1;
+};
+#action {你在攻击中不断积蓄攻势。(气势：%d%)} {
+    jiali $li2;
+    p.$skills[$i_sk] $oppo;
+    jiali $li1;
+    #math i_sk {$i_sk+1};
+};
+#act {%*的作用时间还没过，请过一段时间再施展绝技。} {
+  #if {$i_sk>$n_sk} {
+    #var i_sk 2;
+  };
+  p.$skills[$i_sk] $oppo;
+  #math i_sk {$i_sk+1};
+};
+
+#nop #act {}{};
+
+#act {^莲花生大士给了你一枚天珠，并嘱咐到：在短期内佩戴(pei)在身会有凝神醒脑、提升修为的作用。$} {
+    pei;
+    tzx;
+    #untic tza1;
+};
+#class tza close;

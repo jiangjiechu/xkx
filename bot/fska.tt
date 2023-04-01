@@ -1,0 +1,130 @@
+#class fska open;
+#tic {fskaa} {
+    #show <afa>开始fsk...;
+    #var lw-or-lx lx;
+    #var cd 0;
+    #var lei 0;
+    #var kujie 0;
+    #var qixu 0;
+    #var i 1;
+    #var num 100;
+    #untic fskaa;
+    prep $i;
+} {2};
+
+
+#tic {fskaaa} {fskaa} {77};
+
+#alias {csk %0}  {#var skill %0};
+
+#var {wait-for-sleep} {false};
+
+#alias {fskaa} {
+    #if {"${lw-or-lx}"=="lw"} {lw};
+     #elseif {"${lw-or-lx}"=="lx"} {lx};
+};
+
+#alias lw {lingwu $skill 100};
+#alias lx {lian $skill 50};
+#alias gofsk {
+    dazuo max;
+};
+
+#alias suxing {
+    #var lei 0;
+    #var cd 0;
+    #var kujie 0;
+    #var qixu 0;
+}
+
+#var END {%s$};
+#action {你略一凝神，精神看起来好多了。$END}        {lw};
+#action {你深深吸了几口气，脸色看起来好多了。$END}  {lx};
+
+#action {你现在精力充沛。$END}  {${lw-or-lx}};
+#action {你现在气力充沛。}  {${lw-or-lx}};
+
+#action {你%*练习%1，获得了%*进步！} {
+    #if {$kujie==0} {
+        yun recover;
+    };
+    #else {
+        lx;
+    }
+};
+
+
+#action {%*{你的内力不够|你的内力已经枯竭|你的现在的内力不足}%*$} {
+    #var kujie 1;
+    gosleep
+};
+#act {你%*站了起来} {
+    lx;
+};
+#action {^你的「火焰刀」进步了！} {
+    skbrief huoyan-dao;
+};
+#action {#%1/%2} {
+    #var skill_level %1;
+};
+#action {{你太累了|你的体力不够|你的体力太低|你现在气血虚浮|你的气不足|你现在的气太少|你的气不够}}    {
+    #var qixu 1;
+    #if {$kujie==0} {yun recover};
+    #else {gosleep}
+};
+#action {{^你刚在三分钟内睡过一觉|^你刚刚睡过一觉|^你精血不足}}   {
+    #delay 15 sleep; 
+};
+#action {^你一觉醒来%*$}   {suxing; gofsk;};
+#action {^你慢慢的睁开眼睛%*$}        {suxing; gofsk;};
+
+#action {^你需要提高基本功，不然练得再多也没有用。$END}  {
+    #math i {$i+1};
+    #if {$skill_level >= $max_level} {
+        halt;
+        txx;
+        tna;
+    };
+    #elseif {$i > $n_spskill} {
+        fskx;
+        sleep;
+        lwa;
+    };
+    #else {
+        prep $i;
+    }
+};
+#alias {gosleep} {
+    #if {$lei==0} {
+        #var lei 1;
+        do 3 eat liang;
+        hp;
+        #delay 1 {do 3 drink ;
+        #delay 1 {sleep;
+ }}}};
+#action {^你的基本%*的级别还没有%*的级别高} {
+    #math i {$i+1};
+    #if {$i > $n_spskill} {#var i 1;tna};
+    #else {
+        prep $i;
+    }
+};
+
+#action {^你已经达到你的技能等级极限！}{fskx;dza};
+#action {^你的基本功夫比你的高级功夫还高！$END}          {#var lw-or-lx {lx}};
+#action {^你目前精神状态并不足以领悟%*。} {#var qixu 1;yun regenerate};
+#act {你略一凝神，精神看起来好多了。} {
+    fskaa;
+};
+
+#nop #action {~^%*你的「%1」进步了！%*$END} {};
+#gag {走了过来};
+#gag {往%*离开};
+#gag {^水平%*$}
+#gag {^英雄%*$}
+#gag {^风云%*$}
+#gag {略一凝神，精神看起来好多了。};
+#gag {你现在过于疲倦,无法静下心来领悟功夫！};
+#gag {^> $};
+#gag {^$};
+#class fska close;

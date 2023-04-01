@@ -1,0 +1,149 @@
+#nop GMCP 协商;
+
+/* ====== 说明 ======
+
+需要在游戏中打开接收 gmcp 频道。
+
+在游戏中输入 gmcp 查看：
+
+GMCP 频道收听汇总：
+BUFF(Buff)          〖开〗
+移动信息(Move)      〖开〗
+战斗相关(Combat)    〖开〗
+人物状态(Status)    〖开〗
+
+你接收 GMCP 信息的格式为 raw。
+你可以用 gmcp <channel> on/off 开关 GMCP 频道。
+
+gmcp format [raw|pretty] 接受GMCP是收到基础信息或者有自我描述的信息。
+比如{"qi":100}或者{"气血":100}，默认为raw。
+
+需要在连接服务器之前加载握手事件。
+
+*/
+
+#class gmcp open;
+
+#nop 定义字符;
+#var TELNET[IAC]  \xFF;
+#var TELNET[DONT] \xFE;
+#var TELNET[DO]   \xFD;
+#var TELNET[WONT] \xFC;
+#var TELNET[WILL] \xFB;
+#var TELNET[SB]   \xFA;
+#var TELNET[SE]   \xF0;
+#var TELNET[GMCP] \xC9;
+
+#nop GMCP 握手事件;
+#EVENT {IAC WILL GMCP} {
+  #send {$TELNET[IAC]$TELNET[DO]$TELNET[GMCP]\};
+};
+
+/*
+
+#nop GMCP 调试;
+
+#config {debug telnet} {on};
+
+#eve {IAC SB GMCP} {
+  #echo {%c%h} {light green} {【GMCP 事件：%0】};
+  #echo {<139>参数0:<099>%0};
+  #echo {<139>参数1:<099>%1};
+  #echo {<139>参数2:<099>%2};
+  #echo {%c%h} {light green};
+  #sys echo "" >>gmcp.log;
+  #sys echo "参数0:%0" >>gmcp.log;
+  #sys echo "参数1:%1" >>gmcp.log;
+  #sys echo "" >>gmcp.log;
+};
+
+*/
+
+
+#nop GMCP 接收数据处理;
+#EVENT {IAC SB GMCP} {
+  #switch {"%0"} {
+    #case {"GMCP.Status"} {
+      #var gmcp_status {%1};
+      gmcp_status;
+    };
+    #case {"GMCP.Move"}{
+      #var gmcp_move {%1};
+      gmcp_move;
+      #nop goto_busy;
+    };
+    #case {"GMCP.Buff"}{
+      #var gmcp_move {%1};
+    };
+    #case {"GMCP.Combat"}{
+      #var gmcp_combat {%1};
+    };
+  };
+}; 
+
+
+#nop 状态更新;
+#alias gmcp_status {
+  #if {&{gmcp_status[id]} && {${gmcp_status[id]}} == {{\D+}}}
+  {
+    #local eff_qi $gmcp_status[eff_qi];
+    #local qi $gmcp_status[qi];
+    #local eff_jing $gmcp_status[eff_jing];
+    #local jing $gmcp_status[jing];
+    #local max_jingli $gmcp_status[max_jingli];
+    #local jingli $gmcp_status[jingli];
+    #local max_neili $gmcp_status[max_neili];
+    #local neili $gmcp_status[neili];
+    #local food $gmcp_status[food];
+    #local water $gmcp_status[water];
+    #local id $gmcp_status[id];
+    #local name $gmcp_status[name];
+    #local title $gmcp_status[title];
+    #local combat_exp $gmcp_status[combat_exp];
+    #nop 调用 plugin/prompt.tin API;
+    prompt.Set {
+      {eff_qi}{/$eff_qi}
+      {qi}{$qi}
+      {eff_jing}{/$eff_jing}
+      {jing}{$jing}
+      {max_jingli}{/$max_jingli}
+      {jingli}{$jingli}
+      {max_neili}{/$max_neili}
+      {neili}{$neili}
+      {food}{$food}
+      {water}{$water}
+      {id}{【$id】}
+      {name}{【$name】}
+      {title}{【$title】}
+      {combat_exp} {$combat_exp}
+    };
+  };
+  #elseif {&{gmcp_status[id]}} {
+    #nop 敌方信息;
+  };
+  #else {
+    #loop 1 &{gmcp_status[]} cnt {
+      #local key *{gmcp_status[+$cnt]};
+      #local val ${gmcp_status[+$cnt]};
+      prompt.Set {{$key}{$val}};
+    };
+  };
+};
+
+#nop 位置更新;
+#alias gmcp_move {
+  #if {"${gmcp_move[1][result]}" == "true"} {
+    #local short $gmcp_move[1][short];
+    prompt.Set {{short}{<171>$short}};
+    #local dir ${gmcp_move[1][dir]};
+    #local exits {};
+    #loop 1 &{dir[]} ex {
+      #local exits {$exits\e[4m$dir[+$ex]\e[24m };
+    };
+    prompt.Set {{exits}{<130>$exits<099>}};
+  };
+};
+
+
+
+#class gmcp close;

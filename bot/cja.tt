@@ -1,0 +1,95 @@
+#class cja open;
+#var lei 0
+#var kujie 0
+
+#ali gsleep {
+  skbrief literate;
+  s;e;
+  #class clamb open;
+	#act {你缓缓向上爬去。} {
+		#delay 0.5 {clamber up};
+	};
+	#act {你正忙着呢。} {
+		#delay 0.5 {clamber up};
+	};
+	#act {^琅嬛福地的屋顶 -} {
+		#delay 2 {
+			leap n;
+			#class clamb kill;
+			eat liang;
+			drink;
+			sleep
+		} };
+	#class clamb close;
+	clamber up;
+};
+#ali gout {
+  s;w;n
+};
+#ali cjaa {
+  watch canju 2;
+};
+#tic {cjaa} {#show <afa>开始参悟残局。<099>;#untic cjaa;watch canju} {2};
+
+#nop #tic {cja} {watch canju}{77};
+
+#act {^{你运功完毕，深深吸了口气，站了起来。|你将内息走了个小周天，流回丹田，收功站了起来。|你只觉神元归一，全身精力弥漫，无以复加，忍不住长啸一声，徐徐站了起来。|你将真气在体内沿脉络运行了一圈}} {cjaa};
+
+
+#act {你精力不够，无法领悟残局。} {
+	#if {$kujie==1} {gsleep};
+	#else {yun regenerate;};
+};
+#act {你的内力不够。} {
+	#if {$lei==1} {#var kujie 1};
+	cjaa;
+};
+#act {你现在精不够，无法控制内息的流动！} {
+	gsleep;
+};
+#act {你的内力已经枯竭，不能施用内功。} {
+	#if {$lei==1} {#var kujie 1};
+	cjaa;
+};
+#act {^你现在气血严重不足，无法满足打坐最小要求。} {
+	#var lei 1;
+	cjaa;
+};
+
+
+#act {你对着残局研究了一会,似乎有些心得。} {
+	cjaa
+};
+
+#act {你略一凝神，精神看起来好多了。} {
+	#if {$lei==0} {dazuo max};
+	#else {cjaa}
+};
+#act {你现在精力充沛。} {
+	#if {$lei==0} {dazuo max};
+	#else {cjaa}
+};
+#act {你一觉醒来，精神抖擞地活动了几下手脚。} {
+	suxing;
+    gout;
+	cjaa};
+
+#act {^慢慢地你%*} { 
+	suxing;
+    gout;
+	cjaa
+};
+
+#alias {suxing} {
+	#var lei 0;
+	#var kujie 0;
+}
+
+#act {^你刚刚睡过一觉} {#delay 5 sleep};
+#act {你刚在三分钟内睡过一觉} {
+  #delay 5 sleep
+};
+
+
+
+#class cja close;

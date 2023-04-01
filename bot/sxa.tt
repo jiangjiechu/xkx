@@ -1,0 +1,50 @@
+#class sxa open;
+
+#tic {sxa} {#untic sxa;sxaa} {2};
+#alias {sxaa} {ask yue about job};
+#alias  {sxd} {ask yue about finish};
+#alias  {sxf} {ask yue about fail};
+#act {岳不群%*道：%*{交|送}{给|到}%1。} {
+  #tic {sxa1} {#echo {%c%h} {light yellow} {华山送信目标在%1处}} {5}
+};
+
+#act {%*目前在【%1】,快去摁死它吧!} {
+  #tic {sxa2} {
+  #echo {%c%h} {light yellow} {目标正在%1处} } {15}
+};
+
+#act {你伸手向怀中一摸，发现密函已经不翼而飞！} {
+  #var wait wait;stopwalk;jiali $li;yun powerup};
+
+#act {%*没有 powerup 这个功能。} {
+  yun ku;
+};
+#action {你在攻击中不断积蓄攻势。(气势：%d%)} {
+  #if {"$myid"=="simontuixue" && %1 >= 50} {
+    p.lm jiazei;
+  };
+  #elseif {"$myid"=="jinger" && %1 >= 12} {
+    p.$skills[$i_sk];
+  };
+  #elseif {"$myid"=="jingirl" && %1 >= $qishi[$i_sk]} {
+    p.$skills[$i_sk];
+  };
+  #elseif {"$myid"=="dalabomba" && %1 >= 18} {
+    p.$skills[$i_sk];
+  }
+};
+
+#act {看起来%1想杀死你} {#var sxss %1;#var wait wait; stopwalk;jiali $li;yun powerup};
+#act {$sxss死了} {#delay 2 {get all from corpse}};
+
+#act {你的任务失败}{
+   #untic sxa1;#untic sxa2;sxx};
+
+#act {你总共已经送了%*件密函。} {#untic sxa1;#untic sxa2;sxx;dm;
+  #tic {hfxx} {#untic hfxx; hfx;
+  #show <afa> 可以送信了！
+} {60}
+};
+
+#class sxa close;
+

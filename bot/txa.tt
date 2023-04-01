@@ -1,0 +1,174 @@
+#class fska open;
+#tic {fskaa} {
+    #show <afa>开始fsk...;
+    #var cd 0;
+    #var lei 0;
+    #var kujie 0;
+    #var qixu 0;
+    #var i 1;
+    #var num 4000;
+    #untic fskaa;
+    prepare;
+    skaa;
+} {2};
+
+#alias prepare {
+    skbrief yiyang-zhi;
+
+    #if {"$lx_skills[$i]"=="liumai-shenjian"} {
+        #var skill parry;
+        wield $wp;
+        jifa sword liumai-shenjian;
+        jifa parry liumai-shenjian;
+    };
+    #elseif {"$lx_skills[$i]"=="yiyang-zhi"} {
+        #var skill parry;
+        unwield all;
+        jifa parry yiyang-zhi;
+    };
+    #elseif {"$lx_skills[$i]"=="tiannan-bufa"} {
+        #var skill dodge;
+    };
+    #elseif {"$lx_skills[$i]"=="duanjia-jian"} {
+        #var skill parry;
+        wield $wp;
+        jifa parry duanjia-jian;
+    }
+    lx;
+}
+
+
+#tic {fskaaa} {fskaa} {77};
+
+#alias {csk %0}  {#var skill %0};
+
+#alias {gosleep} {
+    #if {$lei==0} {
+        #var lei 1;
+        do 3 eat liang;
+        hp;
+        #delay 1 {do 3 drink ;
+        #delay 1 {sleep;
+ }}}};
+
+#alias {gofsk} {
+
+    do 3 eat liang;
+    #delay 1 {do 3 drink ;
+    #delay 1 {dazuo max;
+}}};
+
+#var {wait-for-sleep} {false};
+
+#alias {fskaa} {
+    #if {"${lw-or-lx}"=="lw"} {lw};
+     #elseif {"${lw-or-lx}"=="lx"} {lx};
+};
+
+#alias lw {lingwu $skill 100};
+#alias lx {lian $skill 50};
+
+#alias suxing {
+    #var lei 0;
+    #var cd 0;
+    #var kujie 0;
+    #var qixu 0;
+}
+
+#var END {%s$};
+#action {你略一凝神，精神看起来好多了。$END}        {lw};
+#action {你深深吸了几口气，脸色看起来好多了。$END}  {lx};
+
+#action {你现在精力充沛。$END}  {${lw-or-lx}};
+#action {你现在气力充沛。$END}  {${lw-or-lx}};
+
+#action {你%*练习%1，获得了%*进步！} {
+    #if {$kujie==0} {
+        lx;
+    };
+    #else {
+        lx;
+    }
+};
+
+
+#action {%*{你的内力不够|你的内力已经枯竭}%*$} {
+    gosleep
+};
+#act {你%*站了起来} {
+    lx;
+};
+#action {{你太累了|你的体力不够|你的体力太低|你现在气血虚浮|你的气不足|你现在的气太少了}}    {
+    #var qixu 1;
+    #if {$kujie==0} {yun recover};
+    #else {gosleep}
+};
+
+#action {{^你刚在三分钟内睡过一觉|^你刚刚睡过一觉|^你精血不足}}   {
+    #delay 5 sleep; 
+};
+#action {你一觉醒来，精神抖擞地活动了几下手脚。$END}        {suxing; gofsk;};
+#action {你慢慢的睁开眼睛%*$}        {suxing; gofsk;};
+#action {慢慢地你%*$}        {suxing; gofsk;};
+
+#action {^%*你需要提高基本功，不然练得再多也没有用。$}  {
+    #show $i;
+    #math i {$i+1};
+    #if {$yylevel >= $max_level} {
+        halt;
+        txx;
+        tna;
+    };
+    #elseif {$i > 4} {
+        halt;
+        txx;
+        out;n;
+        lwa;
+    };
+    #else {
+        prepare;
+    }
+};
+
+#action {^你的「一阳指」进步了！} {
+    skbrief yiyang-zhi;
+};
+#action {#%1/%2} {
+    #var yylevel %1;
+};
+#action {^%*你的基本%*的级别还没有%*的级别高} {
+    #show $i;
+    #math i {$i+1};
+    #if {$yylevel >= $max_level} {
+        halt;
+        txx;
+        tna;
+    };
+    #elseif {$i > 4} {
+        halt;
+        txx;
+        #delay 1 {lwa}
+    };
+    #else {
+        prepare;
+    }
+};
+#action {^你已经达到你的技能等级极限！}{fskx;dza};
+#action {^你的基本功夫比你的高级功夫还高！$}          {#var lw-or-lx {lx}};
+
+#nop #action {~^%*你的「%1」进步了！%*$END} {};
+#gag {走了过来};
+#gag {往%*离开};
+#gag {^水平%*$}
+#gag {^英雄%*$}
+#gag {^风云%*$}
+#gag {略一凝神，精神看起来好多了。};
+#gag {你现在过于疲倦,无法静下心来领悟功夫！};
+#gag {^> $};
+#gag {^$};
+#nop #gag {^你反复练习};
+#nop #gag {^你现在气力充沛};
+#gag {^你已经吃太饱了};
+#gag {^你已经喝太多了};
+#gag {^你深深吸了几口气};
+#class fska close;

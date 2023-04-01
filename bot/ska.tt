@@ -1,0 +1,201 @@
+#class ska open;
+#var lei 0;
+#var kujie 0;
+#var faint 0;
+#var yun_nums 0;
+#var going 0;
+
+#tic {ska} {skaaa} {77};
+#tic {skaa} {
+      #echo {%c%h} {light yellow}{【指令格式:ska [师傅] [技能] 向师傅学技能】};
+      set brief 3;
+     #untic skaa;
+     skaaa;
+} {2};
+
+#alias suxing {
+  #var lei 0;
+  #var kujie 0;
+  #var faint 0;
+  #var going 0;
+}
+#alias {skaaa} {
+  xue $shi for $gong $num;
+};
+
+#alias {gsleep} {
+  #if {"$shi"=="kurong"} {
+    east;
+    enter
+  };
+  #elseif {"$shi"=="yue"} {e;s};
+  #elseif {"$shi"=="ai"} {nu;nu;nu;w;s;s;s;w;s};
+  #elseif {"$shi"=="fa"} {s};
+  #elseif {"$shi"=="zhu"} {e};
+  #elseif {"$shi"=="duan"} {n};
+  #elseif {"$shi"=="mohe"} {n;nd;enter;e;enter};
+  #elseif {"$shi"=="lingzhi"} {n;n;nd;enter;e;enter};
+  #elseif {"$shi"=="shan"} {w;s;e;enter};
+  #elseif {"$shi"=="sheng"} {e;s;e;enter};
+  #elseif {"$shi"=="sang"} {enter;e;enter};
+  #elseif {"$shi"=="feng" || "$shi"=="cheng"} {};
+  #elseif {"$shi"=="xu"} {s;u};
+  #elseif {"$shi"=="zhi"} {d;s;sd;s;e;enter};
+  #elseif {"$shi"=="jinlun"} {#14 s;e;u};
+  #elseif {"$shi"=="xuan"} {#3 s;w;e;#4 n;e};
+  #elseif {"$shi"=="ma" || "$shi"=="chen"} {e}
+  hp;
+  #delay 1 {sleep}
+};
+#alias gout {
+  #if {"$shi"=="kurong"} { out;#delay 1 {w} };
+  #elseif {"$shi"=="ai"} {n;e;n;n;n;e;sd;sd;sd};
+  #elseif {"$shi"=="yue"} { n;w };
+  #elseif {"$shi"=="fa"} {n};
+  #elseif {"$shi"=="zhu"} { w };
+  #elseif {"$shi"=="duan"} { s };
+  #elseif {"$shi"=="mohe"} { out;w;out;su;s};
+  #elseif {"$shi"=="lingzhi"} { out;w;out;su;s;s};
+  #elseif {"$shi"=="shan"} {out;w;n;e};
+  #elseif {"$shi"=="sheng"} {out;w;n;w};
+  #elseif {"$shi"=="sang"} {out;w;out};
+  #elseif {"$shi"=="feng" || "$shi"=="cheng"}  {};
+  #elseif {"$shi"=="xu"} {d;n};
+  #elseif {"$shi"=="zhi"} {out;w;n;nu;n;up};
+  #elseif {"$shi"=="jinlun"} {d;w;#14 n};
+  #elseif {"$shi"=="xuan"} {w;#4 s;w;n;n;e;n;s};
+  #elseif {"$shi"=="ma" || "$shi"=="chen"} {w}
+};
+
+
+#act {^你和师父切磋了%*消耗了大量潜能} {skx;e;s;tna};
+#act {^也许是缺乏实战经验} {
+  #if {"$myid"=="simontuixue"} {
+    skx;l;
+    #delay 1 {gt gl;};
+    #class tmp open;
+      #act {^鼓楼小院 -} {
+        enter;
+        #class tmp kill;
+        #delay 1 {tla};
+      };
+    #class tmp close;
+  };
+  #elseif {"myid"=="dalabomba"} {
+    #5 s;
+    #delay 0.5 {
+      sethere myr;
+      #delay 0.5 {
+        glw2;
+      }
+    };
+  };
+  #elseif {"$myid"=="jingirl"} {
+    w;
+    skx;
+    dza 264;
+  }
+};
+#alias {glw2} {
+  gt yz;
+  #class tmp2 open;
+  #action {^中央广场 -} {
+    s;s;s;w;
+  };
+  #action {^盛昌总行 -} {
+    enter jianxinju;
+  };
+  #action {你进入了剑心居} {
+    #class tmp2 kill;
+    skx;
+    #delay 1 {lwa}
+  };
+  #class tmp2 close;
+};
+
+#act {#%d/%d} {
+  #var level %1;
+};
+
+#act {^你刚在三分钟内睡过} {#delay 15 sleep};
+#act {^你刚刚睡过一觉} {#delay 15 sleep};
+
+#act {^你的%*进步了} {skbrief $gong};
+
+#act {你略一凝神，精神看起来好多了。} {
+	#if {$yun_nums>2} {
+    #var yun_nums 0;
+    dm};
+	#else {
+    #math yun_nums {$yun_nums+1};
+    skaaa}
+};
+#act {你现在精力充沛。} {
+	#if {$lei==0} {dm};
+	#else {skaaa}
+};
+#act {你的内力不够。} {
+  #if {$kujie==0}{
+    #var kujie 1;
+    skaaa
+  }
+};
+#act {你的内力已经枯竭，不能施用内功。} {
+  #if {$kujie==0}{
+    #var kujie 1;
+    skaaa
+  }
+};
+#act {你今天太累了，结果什么也没有学到。} {
+  #if {$faint==0} {
+    #var faint 1;
+    skaaa;
+  };
+  #elseif {$going==0} {
+    #var going 1;
+    do 3 eat liang;
+    #delay 1 {do 3 drink;};
+    #delay 1 {gsleep;};
+  }
+};
+#act {你洗完了澡，变得楚楚动人，身上散发出阵阵的香气。}{ wear all; s;w;n; skaaa};
+
+#act {你听了%*的指导，%*似乎有些心得。}{
+  #if {$kujie == 0} { yun regenerate};
+  #else {skaaa}
+};
+ 
+#act {^你现在气血严重不足，无法满足打坐最小要求。} {
+  #var lei 1;
+  skaaa};
+#act {^你现在精不够，无法控制内息的流动！} {skaaa};
+#act {^{你运功完毕|你只觉神元归一}%*$} {
+  #var lei 1;
+  skaaa};
+
+#act {^你的内力不够。} {skaaa};
+
+#act {^慢慢地你%*} {
+  suxing;
+  gout;
+  do 2 eat liang;
+  #delay 1 {do 2 drink;
+  #delay 1 {skaaa;
+}}};
+#act {^你一觉醒来%*} {
+  suxing;
+  gout;
+  do 2 eat liang;
+  #delay 1 {do 2 drink;
+  #delay 1 {skaaa;
+}}};
+
+#gag {^这里不是你能睡的地方！};
+#gag {走了过来};
+#gag {往%*离开};
+#gag {了来%*};
+#gag {本仙%*};
+#gag {你已经吃%*};
+#gag {你已经喝%*};
+
+#class ska close;

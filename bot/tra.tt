@@ -1,0 +1,101 @@
+#class tra open;
+#var battle 0;
+#var lock 0;
+#var finish 0;
+
+#alias trab {
+	jifa dodge tiannan-bufa;
+	jifa parry yiyang-zhi;
+};
+
+#alias xi {
+	yun maxsuck $obj;
+};
+#alias taopao {
+	halt;
+	n;
+}
+#alias ghit {
+	s;kill mu;
+}
+
+#act {看起来%*想杀死你} {
+	#var battle 1;
+	#var lock 1;
+	#delay 2 {xi}
+};
+#act {（你上一个动作还没有完成，不能施用内功。）} {
+	#delay 1 {xi}
+};
+
+#act {你觉得%*的丹元自手掌源源涌入身来} {
+	#var sucess 1;
+	#delay 5 {taopao};
+};
+
+#act {可是他看破了你的企图，机灵地溜了开去。} {
+	#var sucess 0;
+	#delay 5 {taopao};
+}
+#act {^%*只能对战斗中的对手使用。$} {
+	#delay 1 {xi};
+}
+
+#act {你的动作还没有完成，不能移动。} {
+	#delay 1 {taopao}
+};
+#act {你刚刚吸取过丹元} {
+	#delay 1 {taopao}
+};
+#act {你逃跑失败} {
+	#delay 1 {taopao};
+};
+#act {^唐官屯 -%*$} {
+	#var battle 0;
+	#var lock 0;
+	#if {$finish==0} {
+		do 2 eat liang;
+		#delay 1 {
+		do 2 drink;
+		#delay 3 {ghit}}};
+	#else {trx;tna}
+};
+#act {^%*木人(Mu ren)%*$} {
+	#if {$lock==0} {
+		#var lock 1;
+		#delay 1 {l};
+	};
+	#elseif {$battle==0} {
+		#delay 1 {yun lifeheal $obj};
+	}
+};
+#act {你左手中指连弹，已封闭了%*伤处的穴道，} {
+	#show <afa> 治疗了$num 次;
+	#if {$num < 2} {
+		#math num {$num + 1};
+		#delay 2 {
+			yun lifeheal $obj;
+		}
+	};
+	#else {
+		#var num 0;
+		taopao;
+}}
+#act {没有受伤，疗什么？} {
+	taopao;
+}
+#act {^%*你无法从他体内吸取丹元！$} {
+	#var finish 1;
+};
+
+
+#gag {^这里不是你能睡的地方！};
+#gag {走了过来};
+#gag {走了进去};
+#gag {往%*离开};
+#gag {了来%*};
+#gag {本仙%*};
+#gag {你已经吃%*}
+#gag {你已经喝%*}
+
+#class tra close;

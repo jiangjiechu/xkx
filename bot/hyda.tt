@@ -1,0 +1,148 @@
+#nop 任务;
+#class hyda open;
+#var f1_set 0;
+#var f2_set 0;
+
+#tic {hyda} {#untic hyda;hydaa} {1};
+#ali {hydaa} {
+  unset adv_quest;
+  #var loc_lock 0;
+  ask hu about job;
+  check_bonus;
+};
+#ali {hydd} {give cangbao tu to hu};
+#ali {hydf} {ask hu about fail};
+
+#act {^胡一刀说道：『我收到消息，听说%*有盗宝人%*(%*)找到了闯王宝藏的地图,你可否帮忙找回来！』$} {
+  #var db_name %2;
+  #var oppo @lower{%3};
+  #if {$loc_lock==0} {
+    #var loc_lock 1;
+    #var loc %1;
+    #tic {hyda1} {#echo {%c%h} {light yellow} {盗宝人%2在%1，到了datan。}} {5};
+  };
+};
+#act {^胡一刀说道：「%*我把参详出的东西绘成了一幅新图，希望你能找到宝藏，恢复我汉室江山。」} {
+  hydx;
+};
+#ali hm {
+  helpme ...;
+  helpme find $oppo;
+};
+#act {%*说道：「你有种去%*找我兄弟%*(%* ... %*)，他会给我报仇的！」} {
+  #var db_name %3;
+  #var loc %2;
+  #var oppo {@lower{%4} %5};
+  #untic hyda1;
+  #tic {hyda1} {#echo {%c%h} {light yellow} {盗宝人%3在%2，到了datan。}} {5};
+
+};
+
+#ali kb {
+  p.yy;
+  kill %1;
+  #delay 2 {yun beiming %1};
+};
+
+
+#alias bm {
+  yun beiming $oppo;
+};
+
+#alias gm {
+  get gem from corpse %1;
+};
+
+#act {看起来%*想杀死你} { #var battle 1;
+  #var n_oppo1;
+	#delay 2 {bm}
+};
+
+#nop #act {}{};
+#action {你在攻击中不断积蓄攻势。(气势：%d%)} {
+  #if {"$myid"=="simontuixue" && %1 >= 12} {
+    p.lm $oppo;
+  };
+  #elseif {"$myid"=="jinger"} {
+    p.jz ;
+  }
+};
+#act {%*死了。} {
+  #var f1_set 0;
+  l;
+  #delay 2 {bm;}
+}
+#alias f1 {
+  #var oppo {%1};
+  #var f1_set 1;
+};
+#alias f2 {
+  #var oppo_bm {%1};
+  #var f2_set 1;
+};
+#alias tx {
+  p.lm $oppo;
+};
+#alias pg {
+  pack gem;
+};
+#alias hc {
+  do 3 get %1 from bo;
+  d1 {
+    combine gem;
+    d1 {pack gem}
+  }
+};
+
+#alias jl {
+  #var n_oppo %0;
+  #showme <afa> OK, n_oppo has been set to $n_oppo;
+};
+#alias hydLog {
+  #line log {hyd.log} {%0};
+};
+
+#alias jm {
+  #var job_mod %0;
+}
+
+#act {^╭───%*{之周|同庆}┬──────────────────────────────────╮$} {
+  #class week open;
+    #act {^│%s韩世忠%s│%*奖励增加%d％。%s│$} {#var job_mod 2};
+    #act {^│%*│→%*韩世忠%*%s│$} {#var job_mod  0};
+    #act {^│%*│↑%*韩世忠%*%s│$} {#var job_mod  1};
+    #act {^│%*│↓%*韩世忠%*%s│$} {#var job_mod -1};
+    #act {^╰───────┴─────────────────────────北大侠客行────╯$} {#class week kill};
+  #class week close;
+  #delay 1 {#showme <afa> bonus_mode: $job_mod;}
+};
+#class report open;
+  #act {^%!s%*点经验；$} {
+    #var exp %1;
+  };
+  #act {^%!s%*点潜能；$} {
+    #var pot %1;
+  };
+  #act {^%!s%*点江湖声望。$} {
+    #var fam %1;
+  };
+  #act {^你已经完成了%*次清除异族奸细的工作。$} {
+    #var taskid %1;
+    #class report kill;
+  };
+#class report close;
+
+#act {^│幸运值%!s│%d%!s│奖励系数%!s│%d% %!s│识图检查%!s│%*完整奖励%*│$} { #var luck %1; #var bonus %2; };
+#act {你被奖励了：} {
+  #format time2 {%t} {%H:%M:%S};
+  #delay 1 {
+    #format record {%s;%s;%s;%d;%d;%d;%s;%s;%s;%s;%s} {$job_mod} {$loc} {$n_oppo} {@ctd{$exp}} {@ctd{$pot}} {@ctd{$fam}} {@ctd{$taskid}} {$time1} {$time2} {$luck} {$bonus};
+    #showme <afa> $record;
+    hydLog $record;
+    #untic hyda1;hydx;
+  }
+};
+#alias bl {
+  bl.start $db_name;
+};
+#class hyda close;

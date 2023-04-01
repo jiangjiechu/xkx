@@ -1,0 +1,95 @@
+#class mra open;
+
+#tic {mra} {
+  #var i 1;
+  #untic mra;mraa;
+  #var i_sk 1;
+}{2};
+#alias {mraa} {
+  #var qi 0;
+  ask pu ren about job};
+#alias  {mrd} {give xin jian to pu ren};
+#alias  {mrf} {ask pu ren about fail};
+
+#act {仆人叹道：家贼难防，有人偷走了少爷的信件，据传曾在『%1』附近出现，你去把它找回来吧} {
+  #tic {mrq1} {#echo {%c%h} {light yellow} {慕容信件目标在%1处}} {5}};
+#act {仆人叹道：家贼难防，有人偷走了少爷的信件，听说在%*的%*留下了线索，你去看看} {
+  #var city %1;
+  #var objroom %2;
+  #tic {mrq2} {#echo {%c%h} {light yellow} {慕容信件线索在%1的%2处}} {5}
+};
+
+#act {%*目前在【%1】,快去摁死它吧!} {
+  #tic {mrq2} {
+  #echo {%c%h} {light yellow} {目标正在%1处} } {15}};
+
+#act {慕容%*卸除了你的兵器%*。} {
+  #math i {$i+1};
+  #if {i>3} {
+    #var i 1;
+  }
+  wield dao $i;
+}
+
+#act {^%s$myname发现的%s慕容世家{家贼|内鬼}(@capital{$myid}'s murong jiazei)} {
+  mplay fight.wav;
+  pause_walk;walk -p;
+  follow jiazei;
+  #if {"$myid" == "jinger" || "$myid"=="jingirl"} {yun powerup};
+  #if {"$myid" == "dalabomba"} {yun longxiang};
+  jiali $li1;
+  kill jiazei;
+  #if {"$myid" == "simontuixue"} {#delay 2 {yun beiming jiazei}};
+};
+#act {^%s$myname发现的%s慕容世家{家贼|内鬼}(Murong jiazei)} { wait;
+  mplay fight.wav;
+  stopwalk;walk -p;
+  follow jiazei;
+  jiali $li1;
+  kill jiazei;
+  #if {"$myid"=="dalabomba"} {yun longxiang};
+  #if {"$myid"=="simontuixue"} {yun beiming jiazei};
+  #else {yun powerup};
+};
+
+#action {你在攻击中不断积蓄攻势。(气势：%d%)} {
+  #var qi {%1};
+  #if {"$myid"=="simontuixue" && $qi >= 50} {
+    p.lm jiazei;
+  };
+  #elseif {"$myid"=="jinger" && $qi >= 12} {
+    p.$skills[$i_sk];
+  };
+  #elseif {"$myid"=="jingirl" && $qi >= $qishi[$i_sk]} {
+    p.$skills[$i_sk];
+  };
+  #elseif {"$myid"=="dalabomba" && $qi >= 18} {
+    p.$skills[$i_sk];
+  }
+};
+#act {%*的作用时间还没过，请过一段时间再施展绝技。} {
+  #math i_sk {$i_sk+1};
+  #if {$i_sk>$n_sk} {
+    #var i_sk 1;
+  };
+  #if {$qi >= $qishi[$i_sk]} {
+    p.$skills[$i_sk];
+  }
+};
+#act {^慕容%*{家贼|内鬼}死了} {
+  #var i 0;
+  #delay 0.5 {
+    get all from corpse;
+    say 可以回去了！
+  };
+  #nop uwield all;
+  #nop wi dao 1;
+};
+
+#act {由于你成功的找回慕容复写给江湖豪杰的信件} {#untic mrq1;#untic mrq2;mrx};
+#act {由于你没有找回慕容复丢失的信件} {
+#untic mrq1;#untic mrq2;mrx};
+
+
+#class mra close;
+

@@ -1,0 +1,206 @@
+#class dsa open;
+
+#nop #tic {dsa}{dsaa}{77};
+
+#tic {dsaa}{
+
+	#var lei 0;
+	#var kujie 0;
+	#var faint 0;
+	#var n_yun 0;
+	#var finished 0;
+	#if {"$myid"=="jingirl"} {
+		#var n_book 1;
+		#var i_book 1;
+		#var book_list {
+			{1}{shediao}
+		};
+		#var check_list {
+			{1} {force}
+		};
+		#var book $book_list[$i_book];
+	};
+	#if {"$myid"=="dalabomba"} {#var max_yun 5};
+	#elseif {"$myid"=="jingirl"} {#var max_yun 5};
+	#else {#var max_yun 10};
+
+	#echo {%c%h} {light yellow}{【指令格式:dsa [书名] [次数]进行读书，i2查看书id。】};#show <afa> 开始读书...;#untic dsaa;dsaa} {1};
+
+#nop #gag {^你思索着小说中关于%*，对%*有一些新的理解。$};
+#nop #gag {^你现在过于疲倦，无法专心下来研读新知。};
+#nop #gag {^你研读了%*似乎有点心得。};
+#nop #gag {^你已经很累了，歇歇再读吧，身体要紧};
+#act {^{你运功完毕，深深吸了口气，站了起来。|你将内息走了个小周天，流回丹田，收功站了起来。|你只觉神元归一，全身精力弥漫，无以复加，忍不住长啸一声，徐徐站了起来。|你将真气在体内沿脉络运行了一圈}} {
+	dsaa;
+};
+#act {你现在内力接近圆满状态} {
+	dsaa;
+}
+
+#act {^你已经很累了，歇歇再读吧，身体要紧} {
+	#if {$faint==1} { gsleep };
+	#else {
+		#var faint 1;
+		dsaa;
+	}
+};
+#act {^你现在过于疲倦，无法专心下来研读新知。} {
+	#if {$faint==1} { gsleep };
+	#else {
+		#var faint 1;
+		dsaa
+	}
+};
+
+#act {^你的精神太差，读不下去了。$} {
+	#if {$faint==1} { gsleep };
+	#else {
+		#var faint 1;
+	}
+};
+
+#act {你的内力不够。} {
+	#if {$kujie==0} {
+		#var kujie 1;
+		dsaa;
+	};
+};
+#act {你的内力已经枯竭，不能施用内功。} {
+	#var kujie 1;
+	dsaa;
+};
+#act {^你现在气血严重不足，无法满足打坐最小要求。} {
+	#var lei 1;
+	dsaa;
+};
+
+#act {你现在精不够，无法控制内息的流动} {exert regenerate};
+
+
+#act {你正专心看着一本厚厚的小说。} { 
+	#if {"$kujie"=="0"} {exert regenerate}; 
+	#elseif {"$faint"=="0"} { dsaa};
+};
+#act {你正专心阅读%*} { 
+	#if {"$kujie"=="0"} {exert regenerate}; 
+	#elseif {"$faint"=="0"} { dsaa};
+};
+#nop #act {你正专心阅读%*} { #if {"$lei"=="0"} {exert regenerate}; #else {dsaa} };
+#nop #act {你从身上拿出} { #if {"$lei"=="0"} {exert regenerate}; #else {dsaa} };
+
+#act {^你研读了%*似乎有点心得。} { 
+	#if {"$kujie"=="0"} {exert regenerate}; 
+	#elseif {"$faint"=="0"} {dsaa};
+};
+#nop #act {^你思索着小说中关于%*，对%*有一些新的理解。$} { #if {"$lei"=="0"} {exert regenerate}; #else {dsaa} };
+
+#act {你的%*火候} {cunbook};
+#act {^#%d/%d} {
+	#show <afa> comparing;
+	#if {%1 >= $max_level && $finished==0} {
+		#showme <afa> 技能$check_list[$i_book] 已满，切换！;
+		#var finished 1;
+	}
+};
+#act {你的%*等级已经高于} {cunbook};
+#act {你的武功等级受到经验限制} {cunbook};
+#act {也许是缺乏实战经验，你对%*总是无法领会。} {cunbook};
+#act {^你看着看着觉得郭靖的内功也不过如此。} {cunbook};
+#act {^你的%*等级已经高于%*，没法再从%*学到任何东西了。} {cunbook};
+#act {你把身上的%*拿出来放进柜子里了。} {dsx;
+suxing;
+#delay 10 {txa}};
+#act {你将%*放进包袱。} {dsx;#ec {停止读书};#ec {开始打坐};dza};
+#act {这个东西不值得保存} {put $book in bag};
+#act {柜子里已经塞了太多的东西了} {put $book in bag};
+#act {这里没有这样东西。} {dsx;#show <faa>读书已停止，请随身携带包袱再运行dsa。<099>};
+
+#act {你刚在三分钟内睡过一觉} { #delay {5} {sleep}; };
+#act {^你刚刚睡过一觉} {#delay 5 sleep};
+
+#act {你略一凝神，精神看起来好多了。} {
+	skbrief $check_list[$i_book];
+	#show <afa> $n_yun;
+	#math n_yun {$n_yun + 1};
+	#if {$myid=="jingirl" && $finished==1} {
+		#delay 2 {
+			#var finished 0;
+			cun $book;
+			#math i_book {$i_book + 1};
+			skbrief $check_list[$i_book];
+			#if {$i_book <= $n_book} {
+				#var book $book_list[$i_book];
+				dsaa
+			};
+			#else {dsx;fska lx};
+
+		};
+	};
+	#nop #if {$finished==1} {#var finished 0;dsx;cunbook; out;gt zp;#delay 15 {n;n;n;sna}};
+	#nop #if {$finished==1} { #math i_book {$i_book + 1}; #var finished 0; #var book $book_list[$i_book]; dsaa};
+	#elseif {$n_yun < $max_yun} {dsaa};
+	#else {
+		#var n_yun 0;
+		dazuo max;
+	}
+};
+#nop #act {你现在精力充沛。} {#ticker dushu {#unticker dushu;dsaa} {3}};
+#act {你现在精力充沛。} {dazuo max};
+#act {你一觉醒来，精神抖擞地活动了几下手脚。} {
+	suxing;
+	dsaa};
+
+#act {^慢慢地你%*} { 
+	suxing;
+	dsaa
+};
+
+#alias {suxing} {
+	#var lei 0;
+	#var kujie 0;
+	#var faint 0;
+}
+
+#alias {gsleep} {
+	hp;
+    do 2 eat liang;
+    #delay 2 {do 2 drink;
+	#delay 2 {
+	sleep
+}}};
+
+#alias cunbook
+{
+	#unticker dushu;
+	#if {$myage<18}
+	{
+		put $book in bag;
+	};
+	#else
+	{
+		store $book;
+	};
+};
+
+
+#alias {dsaa}
+{
+	#if {"$book"=="基础梵文"}
+	{
+		read shu $num;
+	};
+	#elseif {"$book"=="shediao"}
+	{
+		read zhuan $num;
+	};
+ 	#elseif {"$book"=="tianlong"}
+	{
+		read tianlong $num;
+	};
+	#else
+	{
+		study $book for $num;
+	};
+};
+
+#class dsa close;

@@ -1,0 +1,38 @@
+    #nop n;w;s;n;e;se;e;w;nw;e;u;enter;out;d;w;n;e;u;w;e;e;w;u;d;d;w;n;e;w;n;nw;nw;nw;se;se;se;n;n;n;n;w;e;s;s;s;s;s;s;w;u;n;s;d;nw;se;e;s;s;
+    #nop s;w;e;w;u;w;e;n;s;e;w;s;n;d;d;u;e;e;s;n;w;s;w;w;e;e;e;d;ed;n;s;s;n;wu;u;w;s;w;n;s;w;e;s;n;e;e;n;s;s;n;e;n;s;s;n;e;n;s;s;n;e;w;w;w;w;s;su;wu;wu;n;s;ed;ed;se;su;nd;nw;nd;n;n;n;n;
+    bl.comment {长安西};
+    s;w;s;w;e;n;w;n;s;s;w;e;e;w;s;e;w;w;e;s;e;w;w;e;s;e;w;w;e;s;e;w;n;n;n;n;w;e;n;n;s;w;s;n;n;s;w;nu;n;n;n;e;e;e;e;e;e;e;e;e;s;s;s;s;s;s;n;n;n;n;n;n;w;w;w;s;s;w;w;w;w;s;s;e;e;e;e;n;n;w;w;w;w;n;n;w;w;s;s;s;s;s;s;s;e;e;e;e;wd;eu;w;w;e;e;wd;n;w;e;e;w;n;n;w;e;e;e;w;w;n;
+    bl.comment {长安城墙}
+    nu;n;n;n;e;e;e;e;e;e;e;e;e;s;s;s;s;s;s;n;n;n;n;n;n;w;w;w;s;s;w;w;w;w;s;s;e;e;e;e;n;n;w;w;w;w;n;n;w;w;s;s;s;s;s;s;s;e;e;e;e;wd;eu;w;w;e;e;wd;
+    bl.comment {长安东};
+    e;n;w;s;n;se;nw;sw;ne;w;e;n;s;e;n;nw;se;w;e;sw;ne;ne;sw;e;w;se;nw;s;ne;w;e;nw;se;n;s;ne;sw;e;w;se;nw;sw;e;n;s;s;n;w;s;s;n;e;n;n;w;w;e;e;n;n;s;s;e;n;w;e;s;e;e;n;n;n;n;w;w;w;e;e;e;s;s;s;s;e;s;n;se;nd;su;e;e;e;e;e;ed;wu;w;w;w;w;w;nw;s;w;w;w;n;w;nw;ne;sw;se;e;s;w;s;e;w;w;e;s;e;w;w;enter;out;e;s;w;e;se;nw;s;se;e;w;se;nw;w;s;s;s;se;su;nd;nw;sw;sw;sw;sw;w;w;nw;nu;nd;ne;e;s;n;e;w;w;ne;ne;w;nu;sd;e;n;n;n;e;ne;ne;e;n;e;w;ne;sw;s;s;n;w;sw;sw;w;s;s;s;e;e;e;e;e;w;s;s;e;n;
+         #if {"${next_area}" != "NULL"} {
+        gt ${next_area};
+        on_there {
+            bl.bianli %1;
+        };
+        }; 
+        #else {
+            #showme bianli: done;
+            bl.stop;
+        };*/
+    bl.comment {建康北城};
+    n;w;e;e;w;n;w;e;e;w;n;w;e;e;w;n;e;w;n;nw;s;n;n;n;w;e;nu;e;enter;out;w;nw;ne;bl.command {look w};bl.command {look e};sw;se;sd;s;s;nw;se;sw;w;w;n;s;nw;w;e;se;sw;ne;e;su;su;ed;wu;sd;w;wu;sw;s;sw;w;s;sw;sw;ne;ne;n;e;ne;n;ne;ed;s;sd;s;s;n;n;nu;n;e;e;s;w;sw;sw;sd;w;e;nu;ne;ne;e;e;e;s;n;n;s;e;
+
+    bl.comment {往西到苏州};
+    w;w;w;w;w;s;e;s;nw;sw;wu;ne;sw;sw;ne;ed;s;n;
+    ne;se;n;w;n;e;e;e;e;e;
+    bl.comment {往东到归云亭};
+    e;n;s;s;e;w;n;e;n;u;d;s;s;n;e;e;enter;nu;nu;w;e;
+    bl.comment {归云亭到后花园};
+    e;e;n;n;w;n;s;s;n;w;w;e;e;e;s;s;s;w;e;bl.clear_force {zong};s;n;n;e;e;e;s;n;
+    bl.comment {回到太湖};
+    w;w;w;w;w;sd;sd;out;w;w;w;w;
+    bl.comment {黑风山};
+    nu;nu;bl.truce;nu;bl.truce;w;bl.truce;w;bl.truce;e;e;bl.command {look n};sd;sd;sd;
+    bl.comment {隐者};
+    s;s;w;w;e;s;n;n;n;n;n;n;
+
+    bl.comment {大殿东西两侧};
+    w;w;s;w;e;e;w;s;w;e;e;w;n;n;n;w;e;e;w;n;w;e;e;w;n;n;s;e;n;s;w;w;w;w;n;s;e;e;e;s;s;s;w;
+    w;nu;sd;sw;nd;nd;su;su;ne;e;e;e;e;e;e;n;w;e;e;w;n;w;e;e;w;n;n;s;w;n;s;w;e;e;e;e;w;w;s;s;s;e;eu;wd;w;s;w;e;e;w;s;w;e;e;w;n;n;w;w;

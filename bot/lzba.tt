@@ -1,0 +1,28 @@
+#class lzba open;
+
+#nop sword、blade、whip、staff、dagger;
+#var wuqi3 sword;
+
+#act {^你%*武功再高也怕菜刀} {
+sc;
+gt dp;
+#delay 1 {
+buy wp_92;
+#delay 2 {
+gt fds;
+#delay 5 {
+draw armor;
+draw head;
+draw surcoat;
+draw boots;
+draw cloth;
+wield all;
+sethere fds;
+#delay 1 {gt kd;
+#delay 3 {wear all;
+#delay 1 {drop xue;drop shoes;wear all;wield dao; wear zhanyi;
+#class lzba kill;
+
+}}}}}}};
+
+#class lzba close;

@@ -1,0 +1,94 @@
+#nop 加载常用别名、触发、配置、逍遥行、连接信息;
+#re ali.tt;
+#re act.tt;
+#re config.tt;
+#re goto.tt;
+#re colorpad.tt;
+
+#nop 加载鼠标点击下划线标签链接事件;
+#alias mlo {
+  #read mouse.tt;
+}:
+#alias mld {
+  #class mouse kill;
+  #config mouse off;
+};
+mlo;
+
+#nop 断线事件;
+#event {SESSION ACTIVATED} {
+	#if {"%0" == "gts"} {#read init.tt}
+};
+
+#nop emote表情脚本;
+#event {SESSION CONNECTED} {
+   #nop #if {"%0" == "pku"} {#read emote.tt};
+   #read emote.tt;
+};
+
+#nop 屏蔽连接提示;
+#event {GAG SESSION ACTIVATED} {#0};
+#event {GAG SESSION CONNECTED} {#0};
+#event {GAG SESSION CREATED} {#0};
+#event {GAG SESSION DEACTIVATED} {#0};
+#event {GAG SESSION DISCONNECTED} {#0};
+#event {GAG SESSION TIMED OUT} {#0};
+#event {CATCH IAC SB NAWS} {#0};
+
+#class tmp open;
+#alias pku {#class tmp kill;#re pku.tt};
+#alias xkx {#class tmp kill;#re xkx.tt};
+#class tmp close;
+
+#nop screen 滑动，termux启用正常，juicessh异常;
+#alias slide {
+  #config mouse on;
+  #class slide open;
+  #event {SCROLLED MOUSE WHEEL UP} {#buffer up 1};
+  #event {SCROLLED MOUSE WHEEL DOWN} {#buffer down 2};
+  #class slide close;
+};
+#alias unslide {
+  #config mouse off;
+  #class slide kill;
+};
+
+#echo {%c%h} {light yellow};
+#echo {%c%h} {light green} {【请输入pku指令连接至北大侠客行】};
+#echo {%c%h} {light green} {【自定义命令帮助指令omg】};
+#echo {%c%h} {light green} {【逍遥行指令gt】};
+#echo {%c%h} {light yellow};
+
+#nop ==通知样式包装==;
+#nop 彩虹色;
+#function bc0 {
+  #local tmp @color_radom{%0};
+  #return $tmp;
+};
+#nop 绿色;
+#function bc1 {
+  #local tmp {<129>-->%0<--<099>};
+  #return $tmp;
+};
+#nop 青色;
+#function bc2 {
+  #local tmp {<169>...%0...<099>};
+  #return $tmp;
+};
+#nop 黄色;
+#function bc3 {
+  #local tmp {---<139>%0<099>---};
+  #return $tmp;
+};
+#nop ==命令回显==;
+#var VERBOSE 1;
+#EVENT {SEND OUTPUT} {
+  #nop 剥离前后空字符;
+  #format {temp} {%p} {%0};
+  #if {"$temp" != "" && $VERBOSE==1} {
+    #nop 绿黄配色;
+    #echo {<129>-->CMD:[<139>$temp<129>]<--<099>};
+    #nop 彩虹色;
+    #nop #echo @bc0{-->CMD:[$temp]<--};
+  };
+};
