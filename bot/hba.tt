@@ -131,6 +131,7 @@
     #act {^你从小船上跳了下来%*} {g};
     #act {^你累了个半死，终于把镖运到了地头。} {
       #class hb_tmp kill;
+      #untic battle;
       #untic hba1;
       #untic hba2;
       #untic yng;

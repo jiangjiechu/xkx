@@ -19,19 +19,19 @@
 };
 #alias {p.pf} {
   jiali max;
-  perform houquan.pofuchenzhou;
+  perform houquan.pofuchenzhou %0;
   jiali $li1;
 };
 #alias {p.nx} {
     jiali max;
-    perform yunlong-zhua.ningxue;
+    perform yunlong-zhua.ningxue %0;
     jiali 0;
 };
 #alias {p.sc} {
-  perform danxin-jian.sancai;
+  perform danxin-jian.sancai %0;
 };
 #alias {p.suo} {
-  perform jiulong-bian.suo;
+  perform jiulong-bian.suo %0;
 };
 #list sp_skills create {
     lingding-piao;
