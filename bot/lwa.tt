@@ -19,11 +19,11 @@
       #var n_lw 100;
       #var max_yun 20;
     };
-    #elseif {"$myid"=="jinger"} {
+    #elseif {"$myid"=="yrz"} {
       #list basic_skills create {
         force;
+        dodge;
         parry;
-        strike;
         cuff;
         sword;
       };
@@ -70,8 +70,8 @@
   #if {"$myid"=="simontuixue"} {
     s;enter;
   };
-  #elseif {"$myid"=="jinger"} {
-    w;w;s
+  #elseif {"$myid"=="yrz"} {
+    e;e;e;
   };
   hp;
   #delay 1 {sleep}
@@ -80,8 +80,8 @@
   #if {"$myid"=="simontuixue"} {
     out;n
   };
-  #elseif {"$myid"=="jinger"} {
-    n;e;e;
+  #elseif {"$myid"=="yrz"} {
+    w;w;w;
   }
 };
 #alias {suxing} {
@@ -98,16 +98,16 @@
    #echo {当前$lwname领悟进度:};
    skbrief $lwname;
    eat liang;
-	 #delay 1 {drink jiudai;
-   #if {$lei==0} {dazuo max};
+	 #delay 1 {drink niurou tang;
+   #if {$lei==0} {dazuo 240};
    #else {gsleep}
 }};
 #act {你的内力已经枯竭，不能施用内功。} {
    #echo {当前$lwname领悟进度:};
    skbrief $lwname;
    eat liang;
-	 #delay 1 {drink jiudai;
-   #if {$lei==0} {dazuo max};
+	 #delay 1 {drink niurou tang;
+   #if {$lei==0} {dazuo 240};
    #else {gsleep}
 }};
 
@@ -115,14 +115,14 @@
   suxing;
   gout;
   do 2 eat liang;
-  #delay 1 {do 2 drink;
+  #delay 1 {do 2 drink niurou tang;
   #delay 1 {lwaa;
 }}};
 #act {^你一觉醒来%*} {
   suxing;
   gout;
   do 2 eat liang;
-  #delay 1 {do 2 drink;
+  #delay 1 {do 2 drink niurou tang;
   #delay 1 {lwaa;
 }}};
 #act {你现在过于疲倦,无法静下心来领悟功夫%*} {
@@ -132,7 +132,7 @@
   };
   #else {
     do 3 eat liang;
-    #delay 1 {do 3 drink;};
+    #delay 1 {do 3 drink niurou tang;};
     #delay 1 {gsleep;};
   }
 }
@@ -155,12 +155,12 @@
       lwx;
       txa;
     };
-    #elseif {"$myid"=="jinger" && $skill_id > 5} {
+    #elseif {"$myid"=="yrz" && $skill_id > 4} {
       #echo {领悟已停止...};lwx;
       #echo {开始练习...};
-      w;w;s;
+      e;e;e;
       lwx;
-      fska;
+      fska lx;
     };
     #elseif {"$myid"=="jingirl" && $skill_id > 8} {
       #echo {领悟已停止...};lwx;
@@ -195,20 +195,20 @@
 };
 
 #act {你现在精力充沛。} {
-	#if {$lei==0} {dazuo max};
+	#if {$lei==0} {dazuo 240};
 	#else {lwaa}
 };
 #act {你略一凝神，精神看起来好多了。} {
 	#if {$yun_nums>$max_yun} {
     #var yun_nums 0;
-    dazuo max};
+    dazuo 240};
 	#else {
     #math yun_nums {$yun_nums+1};
     lwaa}
 };
 #act {{你运功完毕，深深吸了口气，站了起来。|你将内息走了个小周天，流回丹田，收功站了起来。|你只觉神元归一，全身精力弥漫，无以复加，忍不住长啸一声，徐徐站了起来。|你将真气在体内沿脉络运行了一圈}} {
   do 2 eat liang;
-  do 2 drink;
+  do 2 drink niurou tang;
   #math lei {$lei+1};
   lwaa;
 };

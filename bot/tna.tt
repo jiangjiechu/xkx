@@ -1,12 +1,17 @@
 #class tna open;
+#tic tnaa {
+    #untic tnaa;
+    #var amount 15;
+    tnaa;
+};
 
-#alias {tnaa} {tuna max};
+#alias {tnaa} {tuna $amount};
 
 #act {你现在精力接近圆满状态。}{
     yun regenerate;
     eat liang;
     drink;
-    tuna 10
+    tuna $amount;
 };
 
 
@@ -17,7 +22,7 @@
 
 #act {你吐纳完毕} {yun regenerate};
 #act {你略一凝神，精神看起来好多了。} {
-    dazuo max;
+    dazuo $amount;
 };
 #act {你现在精力充沛。} {tnaa};
 #act {你现在内力接近圆满状态。} {tnaa};
@@ -46,11 +51,11 @@
 #act {你深深吸了几口气} {
     tnaa
 };
-#gag {你吐纳完毕};
-#gag {你运功完毕};
-#gag {你盘膝坐下};
-#gag {你坐下来运气};
-#gag {你略一凝神};
+#nop #gag {你吐纳完毕};
+#nop #gag {你运功完毕};
+#nop #gag {你盘膝坐下};
+#nop #gag {你坐下来运气};
+#nop #gag {你略一凝神};
 #gag {>};
 #gag {^$};
 

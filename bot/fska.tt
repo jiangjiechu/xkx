@@ -25,9 +25,9 @@
 };
 
 #alias lw {lingwu $skill 100};
-#alias lx {lian $skill 50};
+#alias lx {lian $skill 10};
 #alias gofsk {
-    dazuo max;
+    dazuo 90;
 };
 
 #alias suxing {
@@ -45,24 +45,19 @@
 #action {你现在气力充沛。}  {${lw-or-lx}};
 
 #action {你%*练习%1，获得了%*进步！} {
-    #if {$kujie==0} {
-        yun recover;
-    };
-    #else {
-        lx;
-    }
+    dazuo 90;
 };
 
 
 #action {%*{你的内力不够|你的内力已经枯竭|你的现在的内力不足}%*$} {
     #var kujie 1;
-    gosleep
+    dazuo 90;
 };
 #act {你%*站了起来} {
-    lx;
+    yun recover;
 };
-#action {^你的「火焰刀」进步了！} {
-    skbrief huoyan-dao;
+#action {^你的「%*」进步了！} {
+    skbrief yunlong-zhua;
 };
 #action {#%1/%2} {
     #var skill_level %1;
@@ -83,7 +78,7 @@
     #if {$skill_level >= $max_level} {
         halt;
         txx;
-        tna;
+        dza;
     };
     #elseif {$i > $n_spskill} {
         fskx;

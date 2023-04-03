@@ -9,19 +9,20 @@
 	#var faint 0;
 	#var n_yun 0;
 	#var finished 0;
-	#if {"$myid"=="jingirl"} {
+	#if {"$myid"=="yrz"} {
 		#var n_book 1;
 		#var i_book 1;
 		#var book_list {
-			{1}{shediao}
+			{1}{hero book}
 		};
 		#var check_list {
-			{1} {force}
+			{1} {hero-jianfa}
 		};
 		#var book $book_list[$i_book];
 	};
 	#if {"$myid"=="dalabomba"} {#var max_yun 5};
 	#elseif {"$myid"=="jingirl"} {#var max_yun 5};
+	#elseif {"$myid"=="yrz"} {#var max_yun 5};
 	#else {#var max_yun 10};
 
 	#echo {%c%h} {light yellow}{【指令格式:dsa [书名] [次数]进行读书，i2查看书id。】};#show <afa> 开始读书...;#untic dsaa;dsaa} {1};
@@ -136,16 +137,24 @@ suxing;
 
 		};
 	};
+	#if {$finished==1} {
+		dsx;
+		tna;
+
+	};
+
 	#nop #if {$finished==1} {#var finished 0;dsx;cunbook; out;gt zp;#delay 15 {n;n;n;sna}};
 	#nop #if {$finished==1} { #math i_book {$i_book + 1}; #var finished 0; #var book $book_list[$i_book]; dsaa};
 	#elseif {$n_yun < $max_yun} {dsaa};
 	#else {
 		#var n_yun 0;
-		dazuo max;
+		#nop eat liang;
+		#nop drink niurou tang;
+		dazuo 150;
 	}
 };
 #nop #act {你现在精力充沛。} {#ticker dushu {#unticker dushu;dsaa} {3}};
-#act {你现在精力充沛。} {dazuo max};
+#act {你现在精力充沛。} {dazuo 120};
 #act {你一觉醒来，精神抖擞地活动了几下手脚。} {
 	suxing;
 	dsaa};

@@ -12,6 +12,9 @@
      #untic skaa;
      skaaa;
 } {2};
+#alias dm {
+  dazuo 180;
+};
 
 #alias suxing {
   #var lei 0;

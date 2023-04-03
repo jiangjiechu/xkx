@@ -62,11 +62,11 @@
 };
 
 #act {你略一凝神，精神看起来好多了。} {
-	#if {$lei==0} {dazuo max};
+	#if {$lei==0} {dazuo 75};
 	#else {cjaa}
 };
 #act {你现在精力充沛。} {
-	#if {$lei==0} {dazuo max};
+	#if {$lei==0} {dazuo 75};
 	#else {cjaa}
 };
 #act {你一觉醒来，精神抖擞地活动了几下手脚。} {
