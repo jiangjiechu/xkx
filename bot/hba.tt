@@ -72,16 +72,25 @@
       #var in_power 0;
       #showme <afa> in_power: $in_power;
     };
+    #act {^斜刺里冲出来%*,猛地对你痛下杀手！} {
+      on_unbusy {
+        p.fh
+      }
+    };
     #act {^劫匪突然从暗处跳了出来%*} {
       #untic yng;
       #math encounter {$encounter + 1};
       #var battle 1;
       #showme <afa> $battle;
       #var op {$myid's robber};
-      #tic {battle} {
+      on_unbusy {
         hit $op;
-        p.sc $op;
-      } {3};
+        p.fh $op;
+        #tic {battle} {
+          hit $op;
+          p.sc $op;
+        } {4};
+      }
     };
     #act {劫匪趁你不注意，推着镖车就跑，} {
       #var biased 1;

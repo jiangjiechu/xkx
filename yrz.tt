@@ -15,7 +15,7 @@
 #var n_sk 2;
 
 #alias {p.fh} {
-  perform danxin-jian.feihua;
+  perform danxin-jian.feihua %0;
 };
 #alias {p.pf} {
   jiali max;

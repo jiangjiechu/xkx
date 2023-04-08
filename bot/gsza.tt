@@ -3,7 +3,9 @@
 #tic gsza {#untic gsza;gszaa} {1};
 
 #nop ¸¨Öú±ðÃû;
-#ali {gszaa} {ask gongsun about job};
+#ali {gszaa} {
+   unset adv_quest;
+   ask gongsun about job};
 #ali {gszd} {ask gongsun about finish;#untic gsza1;gszx};
 #ali {gszf} {ask gongsun about fail;#untic gsza1;gszx};
 

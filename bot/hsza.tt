@@ -12,7 +12,7 @@
   set wimpy 70;
   set hansz_new_mode 1;
   #if {"$myid"=="simontuixue"} {
-    #nop set adv_quest 50;
+    set adv_quest 50;
   };
   #if {"$myid"=="dalabomba"} {
     set adv_quest 50;
@@ -188,7 +188,6 @@
     #format record {%s;%s;%s;%d;%d;%d;%s;%s;%s;%s;%s} {$job_mod} {$loc} {$n_oppo} {@ctd{$exp}} {@ctd{$pot}} {@ctd{$fam}} {@ctd{$taskid}} {$time1} {$time2} {$luck} {$bonus};
     #showme <afa> $record;
     hszLog $record;
-    #untic hsza1;hszx;
   }
 };
 #gag {^>%s$};

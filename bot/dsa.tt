@@ -23,6 +23,7 @@
 	#if {"$myid"=="dalabomba"} {#var max_yun 5};
 	#elseif {"$myid"=="jingirl"} {#var max_yun 5};
 	#elseif {"$myid"=="yrz"} {#var max_yun 5};
+	#elseif {"$myid"=="yra"} {#var max_yun 2};
 	#else {#var max_yun 10};
 
 	#echo {%c%h} {light yellow}{【指令格式:dsa [书名] [次数]进行读书，i2查看书id。】};#show <afa> 开始读书...;#untic dsaa;dsaa} {1};
@@ -150,11 +151,11 @@ suxing;
 		#var n_yun 0;
 		#nop eat liang;
 		#nop drink niurou tang;
-		dazuo 150;
+		dazuo $amount;
 	}
 };
 #nop #act {你现在精力充沛。} {#ticker dushu {#unticker dushu;dsaa} {3}};
-#act {你现在精力充沛。} {dazuo 120};
+#act {你现在精力充沛。} {dazuo $amount};
 #act {你一觉醒来，精神抖擞地活动了几下手脚。} {
 	suxing;
 	dsaa};

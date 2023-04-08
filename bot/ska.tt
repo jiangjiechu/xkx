@@ -13,7 +13,7 @@
      skaaa;
 } {2};
 #alias dm {
-  dazuo 180;
+  dazuo $amount;
 };
 
 #alias suxing {
